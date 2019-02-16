@@ -12,22 +12,18 @@
     <fragment android:id="@+id/login" android:name="com.unter.Login" android:label="fragment_login"
               tools:layout="@layout/fragment_login">
         <action android:id="@+id/action_login_to_home" app:destination="@id/home"/>
-        <action android:id="@+id/action_login_self" app:destination="@id/login"/>
+        <action android:id="@+id/action_login_to_splash2" app:destination="@id/splash"/>
     </fragment>
     <fragment android:id="@+id/register" android:name="com.unter.Register" android:label="fragment_register"
               tools:layout="@layout/fragment_register">
         <action android:id="@+id/action_register_to_login" app:destination="@id/login"/>
-        <action android:id="@+id/action_register_self" app:destination="@id/register"/>
+        <action android:id="@+id/action_register_to_splash2" app:destination="@id/splash"/>
     </fragment>
     <fragment android:id="@+id/home" android:name="com.unter.Home" android:label="fragment_home"
               tools:layout="@layout/fragment_home">
-        <action android:id="@+id/action_home_to_account" app:destination="@id/account"/>
         <action android:id="@+id/action_home_to_journeyRequest" app:destination="@id/journeyRequest"/>
-    </fragment>
-    <fragment android:id="@+id/account" android:name="com.unter.Account" android:label="fragment_account"
-              tools:layout="@layout/fragment_account">
-        <action android:id="@+id/action_account_to_home" app:destination="@id/home"/>
-        <action android:id="@+id/action_account_to_history" app:destination="@id/history"/>
+        <action android:id="@+id/action_home_to_splash" app:destination="@id/splash"/>
+        <action android:id="@+id/action_home_to_driverInfo" app:destination="@id/driverInfo"/>
     </fragment>
     <fragment android:id="@+id/driverInfo" android:name="com.unter.DriverInfo" android:label="fragment_driver_info"
               tools:layout="@layout/fragment_driver_info"/>
@@ -52,8 +48,4 @@
     </fragment>
     <fragment android:id="@+id/journeyComplete" android:name="com.unter.JourneyComplete"
               android:label="fragment_journey_complete" tools:layout="@layout/fragment_journey_complete"/>
-    <fragment android:id="@+id/history" android:name="com.unter.History" android:label="fragment_history"
-              tools:layout="@layout/fragment_history">
-        <action android:id="@+id/action_history_to_driverInfo" app:destination="@id/driverInfo"/>
-    </fragment>
 </navigation>
