@@ -8,61 +8,14 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="account">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="-397" />
-                            <option name="y" value="396" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_account_to_history">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="action_account_to_home">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="driverInfo">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="229" />
-                            <option name="y" value="386" />
+                            <option name="x" value="-101" />
+                            <option name="y" value="-82" />
                           </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="history">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="-71" />
-                            <option name="y" value="392" />
-                          </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_history_to_driverInfo">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -72,13 +25,13 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-252" />
-                            <option name="y" value="-368" />
+                            <option name="x" value="-268" />
+                            <option name="y" value="-458" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_home_to_account">
+                            <entry key="action_home_to_driverInfo">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -98,8 +51,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1197" />
-                            <option name="y" value="152" />
+                            <option name="x" value="1167" />
+                            <option name="y" value="-434" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -110,18 +63,13 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="443" />
-                            <option name="y" value="-407" />
+                            <option name="x" value="363" />
+                            <option name="y" value="-445" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_journeyConfirm_to_journeyPrepare">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="action_journeyConfirm_to_journeyRequest">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -136,8 +84,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1031" />
-                            <option name="y" value="-395" />
+                            <option name="x" value="925" />
+                            <option name="y" value="-437" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -157,17 +105,12 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="753" />
-                            <option name="y" value="-607" />
+                            <option name="x" value="653" />
+                            <option name="y" value="-441" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_journeyPrepare_to_home">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
                             <entry key="action_journeyPrepare_to_journeyFulflill">
                               <value>
                                 <LayoutPositions />
@@ -183,17 +126,12 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="190" />
-                            <option name="y" value="-390" />
+                            <option name="x" value="86" />
+                            <option name="y" value="-442" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_journeyRequest_to_home">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
                             <entry key="action_journeyRequest_to_journeyConfirm">
                               <value>
                                 <LayoutPositions />
@@ -209,17 +147,12 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-655" />
-                            <option name="y" value="-500" />
+                            <option name="x" value="-575" />
+                            <option name="y" value="-464" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_login_self">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
                             <entry key="action_login_to_home">
                               <value>
                                 <LayoutPositions />
@@ -241,11 +174,6 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_register_self">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
                             <entry key="action_register_to_login">
                               <value>
                                 <LayoutPositions />
