@@ -1,18 +1,18 @@
 package com.unter
 
-import android.content.Context
-import android.net.Uri
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.navigation.fragment.NavHostFragment
+import com.unter.model.UnterAppModel
+import com.unter.model.exception.RegisterException
 
 /**
  * A simple [Fragment] subclass.
@@ -27,14 +27,19 @@ class Register : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var listener: OnFragmentInteractionListener? = null
+//    private var listener: OnFragmentInteractionListener? = null
+
+    private lateinit var textEmail: EditText
+    private lateinit var textPassword: EditText
+
+    private lateinit var buttonRegister: Button
+    private lateinit var buttonBack: FloatingActionButton
+
+    private lateinit var model: UnterAppModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        model = ViewModelProviders.of(activity!!).get(UnterAppModel::class.java)
     }
 
     override fun onCreateView(
@@ -45,58 +50,31 @@ class Register : Fragment() {
         return inflater.inflate(R.layout.fragment_register, container, false)
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-        }
-    }
+        // set up UI components
+        buttonRegister = getView()!!.findViewById(R.id.button_register_register)
+        buttonBack = getView()!!.findViewById(R.id.fab_register_cancel)
+        textEmail = getView()!!.findViewById(R.id.text_register_email)
+        textPassword = getView()!!.findViewById(R.id.text_register_password)
 
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Register.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Register().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        buttonRegister.setOnClickListener {
+            try {
+                // request the controller to register a user
+                model.register(textEmail.text.toString(), textPassword.text.toString())
+                // change the view if successful
+                NavHostFragment.findNavController(this).navigate(R.id.action_register_to_login)
+            } catch (e: RegisterException) {
+                // display error if unsuccessful
+                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
             }
+        }
+
+        buttonBack.setOnClickListener {
+            // move back on the navigation stack
+            NavHostFragment.findNavController(this).navigateUp()
+        }
     }
 }

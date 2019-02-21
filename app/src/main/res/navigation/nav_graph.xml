@@ -11,7 +11,8 @@
     </fragment>
     <fragment android:id="@+id/login" android:name="com.unter.Login" android:label="fragment_login"
               tools:layout="@layout/fragment_login">
-        <action android:id="@+id/action_login_to_home" app:destination="@id/home"/>
+        <action android:id="@+id/action_login_to_home" app:destination="@id/home"
+                app:popUpTo="@+id/login" app:popUpToInclusive="true"/>
     </fragment>
     <fragment android:id="@+id/register" android:name="com.unter.Register" android:label="fragment_register"
               tools:layout="@layout/fragment_register">

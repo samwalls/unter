@@ -31,7 +31,7 @@ class Splash : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var listener: OnFragmentInteractionListener? = null
+//    private var listener: OnFragmentInteractionListener? = null
 
     private lateinit var loginButton: Button
     private lateinit var registerButton: Button
@@ -67,19 +67,19 @@ class Splash : Fragment() {
         return inflater.inflate(R.layout.fragment_unter_splash, container, false)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-        }
-    }
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//        if (context is OnFragmentInteractionListener) {
+//            listener = context
+//        } else {
+//            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+//        }
+//    }
 
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
+//    override fun onDetach() {
+//        super.onDetach()
+//        listener = null
+//    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -92,10 +92,10 @@ class Splash : Fragment() {
      * (http://developer.android.com/training/basics/fragments/communicating.html)
      * for more information.
      */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
+//    interface OnFragmentInteractionListener {
+//        // TODO: Update argument type and name
+//        fun onFragmentInteraction(uri: Uri)
+//    }
 
     companion object {
         /**

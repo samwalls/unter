@@ -1,24 +1,21 @@
 package com.unter.activity
 
-import android.net.Uri
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.unter.Login
-import com.unter.R
-import com.unter.Register
-import com.unter.Splash
 
-class MainActivity : AppCompatActivity(),
-    Splash.OnFragmentInteractionListener,
-    Login.OnFragmentInteractionListener,
-    Register.OnFragmentInteractionListener {
+import com.unter.*
+import com.unter.model.UnterAppModel
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var model: UnterAppModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    }
 
-    override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        model = ViewModelProviders.of(this).get(UnterAppModel::class.java)
+        model.initStorage(filesDir.absolutePath)
     }
 }
