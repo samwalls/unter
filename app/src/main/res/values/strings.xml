@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Unter</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_main">Unter</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="mapbox_unter_style">mapbox://styles/samwalls/cjshrbmw92t1u1fr6q86m24xd</string>
 </resources>

@@ -24,10 +24,6 @@ import com.unter.model.exception.RegisterException
  *
  */
 class Register : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-//    private var listener: OnFragmentInteractionListener? = null
 
     private lateinit var textEmail: EditText
     private lateinit var textPassword: EditText
@@ -54,10 +50,10 @@ class Register : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // set up UI components
-        buttonRegister = getView()!!.findViewById(R.id.button_register_register)
-        buttonBack = getView()!!.findViewById(R.id.fab_register_cancel)
-        textEmail = getView()!!.findViewById(R.id.text_register_email)
-        textPassword = getView()!!.findViewById(R.id.text_register_password)
+        buttonRegister = view.findViewById(R.id.button_register_register)
+        buttonBack = view.findViewById(R.id.fab_register_cancel)
+        textEmail = view.findViewById(R.id.text_register_email)
+        textPassword = view.findViewById(R.id.text_register_password)
 
 
         buttonRegister.setOnClickListener {

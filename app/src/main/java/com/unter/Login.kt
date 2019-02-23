@@ -47,11 +47,11 @@ class Login : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        buttonLogin = getView()!!.findViewById(R.id.button_login_login)
-        buttonBack = getView()!!.findViewById(R.id.fab_login_cancel)
+        buttonLogin = view.findViewById(R.id.button_login_login)
+        buttonBack = view.findViewById(R.id.fab_login_cancel)
 
-        textEmail = getView()!!.findViewById(R.id.text_login_email)
-        textPassword = getView()!!.findViewById(R.id.text_login_password)
+        textEmail = view.findViewById(R.id.text_login_email)
+        textPassword = view.findViewById(R.id.text_login_password)
 
         buttonLogin.setOnClickListener {
             model.login(textEmail.text.toString(), textPassword.text.toString())
