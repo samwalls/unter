@@ -228,3 +228,6 @@ fabric.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 
 # End of https://www.gitignore.io/api/java,kotlin,android,androidstudio
+
+# ignore XML containing secret values needed at app runtime
+app/src/main/res/values/secrets.xml
