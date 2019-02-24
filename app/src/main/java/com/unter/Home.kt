@@ -14,6 +14,7 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment
 import com.unter.model.UnterAppModel
 import java.lang.IndexOutOfBoundsException
 
@@ -49,7 +50,7 @@ class Home : Fragment() {
         tabHost.setup(activity, childFragmentManager, R.layout.fragment_home)
         tabHost.addTab(tabHost.newTabSpec("Search").setIndicator("Search"), JourneyRequest::class.java, null)
         tabHost.addTab(tabHost.newTabSpec("Account").setIndicator("Account"), Account::class.java, null)
-        //return inflater.inflate(R.layout.fragment_home, container, false)
+        //inflater.inflate(R.layout.fragment_home, container, false)
         return tabHost
     }
 }

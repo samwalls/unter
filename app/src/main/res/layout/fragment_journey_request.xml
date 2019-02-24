@@ -1,27 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:mapbox="http://schemas.android.com/apk/res-auto"
-                                             android:layout_width="match_parent"
+                                             xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
                                              android:layout_height="match_parent">
+    <android.support.v7.widget.CardView
+            android:layout_width="380dp"
+            android:layout_height="284dp" android:layout_marginBottom="16dp"
+            mapbox:layout_constraintBottom_toBottomOf="parent"
+            mapbox:layout_constraintEnd_toEndOf="parent"
+            mapbox:layout_constraintStart_toStartOf="@+id/mapView" android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginRight="16dp"
+            android:id="@+id/journey_confirm_card" android:visibility="visible" android:clickable="true">
+        <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:clickable="false">
 
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-             <!--xmlns:tools="http://schemas.android.com/tools"-->
-             <!--android:layout_width="match_parent"-->
-             <!--android:layout_height="match_parent"-->
-             <!--tools:context=".JourneyRequest">-->
-
-    <!--<fragment-->
-            <!--class="com.google.android.gms.maps.MapFragment"-->
-            <!--android:id="@+id/mapFragment"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"/>-->
-    <!--<com.google.android.gms.maps.MapView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/mapView"/>-->
-
-        <com.mapbox.mapboxsdk.maps.MapView
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="time"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:id="@+id/journey_time_pickup"
+                    android:hint="pickup time"
+                    android:layout_marginTop="8dp" mapbox:layout_constraintTop_toBottomOf="@+id/edittext_destination"
+                    mapbox:layout_constraintStart_toStartOf="@+id/edittext_destination"
+            />
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/textView5"
+                    mapbox:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginLeft="24dp" android:layout_marginStart="24dp"
+                    tools:text="Pickup" mapbox:layout_constraintTop_toTopOf="@+id/journey_time_pickup"/>
+            <TextView
+                    android:text="from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textview_origin" tools:text="From"
+                    android:layout_marginStart="24dp" mapbox:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginLeft="24dp" android:layout_marginTop="8dp"
+                    mapbox:layout_constraintTop_toTopOf="@+id/edittext_origin"/>
+            <TextView
+                    android:text="To"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textview_destination"
+                    mapbox:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginLeft="32dp" android:layout_marginStart="32dp"
+                    tools:text="To" android:layout_marginTop="8dp"
+                    mapbox:layout_constraintTop_toTopOf="@+id/edittext_destination"/>
+            <TextView
+                    android:text="Arrival"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textview_time_arrival"
+                    mapbox:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="24dp"
+                    android:layout_marginStart="24dp" tools:text="Arrival"
+                    mapbox:layout_constraintTop_toTopOf="@+id/editText4"/>
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPostalAddress"
+                    android:ems="10"
+                    android:id="@+id/edittext_origin"
+                    mapbox:layout_constraintStart_toEndOf="@+id/textview_origin" android:layout_marginStart="64dp"
+                    android:layout_marginLeft="64dp" android:layout_marginTop="8dp"
+                    mapbox:layout_constraintTop_toTopOf="parent" android:hint="pick-up address"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:enabled="false"/>
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:id="@+id/edittext_destination" android:layout_marginTop="8dp"
+                    mapbox:layout_constraintTop_toBottomOf="@+id/edittext_origin"
+                    mapbox:layout_constraintStart_toStartOf="@+id/edittext_origin"
+                    android:inputType="textPostalAddress" android:hint="drop-off address"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:enabled="false"/>
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="time"
+                    android:ems="10"
+                    android:id="@+id/editText4" mapbox:layout_constraintStart_toStartOf="@+id/journey_time_pickup"
+                    android:layout_marginTop="8dp" mapbox:layout_constraintTop_toBottomOf="@+id/journey_time_pickup"
+                    android:hint="arrival time"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:enabled="false"/>
+            <Button
+                    android:text="Find Drivers"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_find_drivers"
+                    mapbox:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginLeft="8dp" android:layout_marginStart="8dp"
+                    mapbox:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp" android:layout_marginTop="8dp"
+                    mapbox:layout_constraintTop_toBottomOf="@+id/editText4" android:layout_marginBottom="8dp"
+                    mapbox:layout_constraintBottom_toBottomOf="parent"
+                    android:enabled="false"/>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+    <com.mapbox.mapboxsdk.maps.MapView
                 android:id="@+id/mapView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -32,8 +119,7 @@
                 mapbox:mapbox_cameraTargetLat="41.885"
                 mapbox:mapbox_cameraTargetLng="-87.679"
                 mapbox:mapbox_cameraTilt="60"
-                mapbox:mapbox_cameraZoom="12" />
+                mapbox:mapbox_cameraZoom="12" >
+    </com.mapbox.mapboxsdk.maps.MapView>
 
-    </android.support.constraint.ConstraintLayout>
-
-<!--</FrameLayout>-->
+</android.support.constraint.ConstraintLayout>

@@ -29,6 +29,15 @@
                             <option name="y" value="679" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_home_to_journeyConfirm">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
@@ -37,8 +46,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="2010" />
-                            <option name="y" value="1354" />
+                            <option name="x" value="3022" />
+                            <option name="y" value="1106" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -49,8 +58,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="846" />
-                            <option name="y" value="1354" />
+                            <option name="x" value="1858" />
+                            <option name="y" value="1106" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -70,8 +79,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1622" />
-                            <option name="y" value="1354" />
+                            <option name="x" value="2634" />
+                            <option name="y" value="1106" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -91,8 +100,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="1234" />
-                            <option name="y" value="1354" />
+                            <option name="x" value="2246" />
+                            <option name="y" value="1106" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -112,18 +121,9 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="458" />
-                            <option name="y" value="1354" />
+                            <option name="x" value="1857" />
+                            <option name="y" value="489" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="action_journeyRequest_to_journeyConfirm">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
