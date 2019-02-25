@@ -54,7 +54,7 @@ public class JourneyRequestInfo extends Data {
     }
 
     public Double getDestinationLat() {
-        return destinationLong;
+        return destinationLat;
     }
 
     public void setDestinationLat(Double destinationLat) {

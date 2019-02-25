@@ -186,8 +186,8 @@ class JourneyRequest : Fragment() {
                         "?userId=${model.currentUser!!.id}" +
                         "&originLong=${model.currentRequest!!.originLong}" +
                         "&originLat=${model.currentRequest!!.originLat}" +
-                        "&destinationLong=${model.currentRequest!!.originLong}" +
-                        "&destinationLat=${model.currentRequest!!.originLat}")
+                        "&destinationLong=${model.currentRequest!!.destinationLong}" +
+                        "&destinationLat=${model.currentRequest!!.destinationLat}")
 
                 d(TAG, "emitting journey confirm intent with URI: '$requestUri'")
                 startActivity(Intent(Intent.ACTION_VIEW, requestUri))
@@ -393,7 +393,7 @@ class JourneyRequest : Fragment() {
         request.originLong = origin.longitude
         request.originLat = origin.latitude
         request.destinationLong = destination.longitude
-        request.destinationLat = destination.longitude
+        request.destinationLat = destination.latitude
 
         // enable the request button if it's ok to do so
         val enabled = isRequestEnabled()

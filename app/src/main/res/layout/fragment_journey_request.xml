@@ -124,10 +124,10 @@
                 mapbox:layout_constraintEnd_toEndOf="parent"
                 mapbox:layout_constraintStart_toStartOf="parent"
                 mapbox:layout_constraintTop_toTopOf="parent"
-                mapbox:mapbox_cameraTargetLat="41.885"
-                mapbox:mapbox_cameraTargetLng="-87.679"
-                mapbox:mapbox_cameraTilt="60"
-                mapbox:mapbox_cameraZoom="12" >
+                mapbox:mapbox_cameraTargetLat="55.378"
+                mapbox:mapbox_cameraTargetLng="3.436"
+                mapbox:mapbox_cameraTilt="0"
+                mapbox:mapbox_cameraZoom="12">
     </com.mapbox.mapboxsdk.maps.MapView>
 
 </android.support.constraint.ConstraintLayout>
