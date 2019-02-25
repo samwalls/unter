@@ -20,25 +20,7 @@
                 app:popUpToInclusive="true"/>
     </fragment>
     <fragment android:id="@+id/home" android:name="com.unter.Home" android:label="fragment_home"
-              tools:layout="@layout/fragment_home">
-        <action android:id="@+id/action_home_to_journeyConfirm" app:destination="@id/journeyConfirm"/>
-    </fragment>
-    <fragment android:id="@+id/driverInfo" android:name="com.unter.DriverInfo" android:label="fragment_driver_info"
-              tools:layout="@layout/fragment_driver_info"/>
+              tools:layout="@layout/fragment_home"/>
     <fragment android:id="@+id/journeyRequest" android:name="com.unter.JourneyRequest"
               android:label="fragment_journey_request" tools:layout="@layout/fragment_journey_request"/>
-    <fragment android:id="@+id/journeyConfirm" android:name="com.unter.JourneyConfirm"
-              android:label="fragment_journey_confirm" tools:layout="@layout/fragment_journey_confirm">
-        <action android:id="@+id/action_journeyConfirm_to_journeyPrepare" app:destination="@id/journeyPrepare"/>
-    </fragment>
-    <fragment android:id="@+id/journeyPrepare" android:name="com.unter.JourneyPrepare"
-              android:label="fragment_journey_prepare" tools:layout="@layout/fragment_journey_prepare">
-        <action android:id="@+id/action_journeyPrepare_to_journeyFulflill" app:destination="@id/journeyFulflill"/>
-    </fragment>
-    <fragment android:id="@+id/journeyFulflill" android:name="com.unter.JourneyFulflill"
-              android:label="fragment_journey_fulflill" tools:layout="@layout/fragment_journey_fulflill">
-        <action android:id="@+id/action_journeyFulflill_to_journeyComplete" app:destination="@id/journeyComplete"/>
-    </fragment>
-    <fragment android:id="@+id/journeyComplete" android:name="com.unter.JourneyComplete"
-              android:label="fragment_journey_complete" tools:layout="@layout/fragment_journey_complete"/>
 </navigation>

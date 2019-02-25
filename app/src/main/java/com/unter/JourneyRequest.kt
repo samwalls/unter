@@ -4,8 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -178,7 +180,17 @@ class JourneyRequest : Fragment() {
         buttonRequest.setOnClickListener {
             // if all fields are ready for a request to be sent, navigate to the next view
             if (isRequestEnabled()) {
-                NavHostFragment.findNavController(this).navigate(R.id.action_home_to_journeyConfirm)
+                model.currentRequest = request
+
+                val requestUri: Uri = Uri.parse("unter://ride/request" +
+                        "?userId=${model.currentUser!!.id}" +
+                        "&originLong=${model.currentRequest!!.originLong}" +
+                        "&originLat=${model.currentRequest!!.originLat}" +
+                        "&destinationLong=${model.currentRequest!!.originLong}" +
+                        "&destinationLat=${model.currentRequest!!.originLat}")
+
+                d(TAG, "emitting journey confirm intent with URI: '$requestUri'")
+                startActivity(Intent(Intent.ACTION_VIEW, requestUri))
             }
         }
 

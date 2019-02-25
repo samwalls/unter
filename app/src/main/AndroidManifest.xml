@@ -25,10 +25,25 @@
                 android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+                android:name=".activity.JourneyConfirmActivity"
+                android:label="Unter"
+                android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Allows the activity to pick up on "unter" URIs -->
+                <data android:scheme="unter"/>
+            </intent-filter>
+        </activity>
+        <service
+                android:name=".service.RideNotificationService"
+                android:label="Unter Ride Notification Service"/>
     </application>
 
 </manifest>
