@@ -12,6 +12,10 @@ public interface AppDataModel {
 
     void addUser(UserInfo user);
 
+    void setLoggedInUser(UserInfo user);
+
+    String getLoggedInUser();
+
     void deleteUser(String id);
 
     DriverInfo getDriver(String id);

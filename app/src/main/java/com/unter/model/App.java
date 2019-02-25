@@ -29,7 +29,7 @@ public abstract class App<T extends AppDataModel> {
 
     protected abstract void onExit() throws Exception;
 
-    public abstract void login(String username, String password) throws LoginException;
+    public abstract String login(String username, String password) throws LoginException;
 
     public void onLoginSuccess() {}
 
@@ -42,4 +42,8 @@ public abstract class App<T extends AppDataModel> {
     public void onRegisterSuccess() {}
 
     public void onRegisterFailure() {}
+
+    public abstract UserInfo getUser(String userId);
+
+    public abstract DriverInfo requestDriver(JourneyRequestInfo request);
 }

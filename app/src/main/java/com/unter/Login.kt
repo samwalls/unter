@@ -9,8 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.navigation.fragment.NavHostFragment
 import com.unter.model.UnterAppModel
+import com.unter.model.exception.LoginException
 
 /**
  * A simple [Fragment] subclass.
@@ -54,8 +56,14 @@ class Login : Fragment() {
         textPassword = view.findViewById(R.id.text_login_password)
 
         buttonLogin.setOnClickListener {
-            model.login(textEmail.text.toString(), textPassword.text.toString())
-            NavHostFragment.findNavController(this).navigate(R.id.action_login_to_home)
+            try {
+                // attempt to login
+                model.login(textEmail.text.toString(), textPassword.text.toString())
+                NavHostFragment.findNavController(this).navigate(R.id.action_login_to_home)
+            } catch (e: LoginException) {
+                // display error if unsuccessful
+                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+            }
         }
 
         buttonBack.setOnClickListener {
