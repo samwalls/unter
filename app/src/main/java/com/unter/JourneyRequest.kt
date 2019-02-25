@@ -1,12 +1,16 @@
 package com.unter
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.arch.lifecycle.ViewModelProviders
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v7.widget.CardView
+import android.transition.Visibility
 import android.util.Log.d
 import android.util.Log.e
 import android.view.LayoutInflater
@@ -16,10 +20,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.navigation.NavGraph
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
-import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.api.directions.v5.models.DirectionsResponse
 import com.mapbox.api.directions.v5.models.DirectionsRoute
@@ -30,6 +31,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
+import com.mapbox.mapboxsdk.constants.MapboxConstants
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.LocationComponent
 import com.mapbox.mapboxsdk.location.modes.CameraMode
@@ -62,16 +64,22 @@ import java.util.Calendar.MINUTE
  *
  */
 @SuppressLint("LogNotTimber")
-class JourneyRequest : Fragment(), PermissionsListener {
+class JourneyRequest : Fragment() {
+
+    public val LOCATION_REQUEST_CODE: Int = 0
 
     private val TAG: String = JourneyRequest::class.java.canonicalName!!
 
     private lateinit var model: UnterAppModel
 
+    private lateinit var journeyRequestCard: CardView
+
     private lateinit var textOrigin: TextView
     private lateinit var textDestination: TextView
     private lateinit var textArrivalTime: TextView
     private lateinit var textPickupTime: EditText
+
+    private lateinit var textPriceEstimate: TextView
 
     private lateinit var buttonRequest: Button
 
@@ -80,8 +88,13 @@ class JourneyRequest : Fragment(), PermissionsListener {
     private lateinit var mapView: MapView
     private lateinit var mapboxMap: MapboxMap
 
-    private lateinit var permissionsManager: PermissionsManager
     private lateinit var locationComponent: LocationComponent
+
+    private var locationOrigin: LatLng? = null
+    private var locationDestination: LatLng? = null
+
+    // the current coordinate being selected which will be updated when the map is clicked
+    private var locationSelection: LatLng? = null
 
     private lateinit var routePickupToDestination: DirectionsRoute
     private var navigationMapRoute: NavigationMapRoute? = null
@@ -90,7 +103,7 @@ class JourneyRequest : Fragment(), PermissionsListener {
         super.onCreate(savedInstanceState)
         model = ViewModelProviders.of(activity!!).get(UnterAppModel::class.java)
         Mapbox.getInstance(context!!, resources.getString(R.string.mapbox_access_token))
-        // clear back stack so that navigation graph resolves properly to this fragment as the root
+
         retainInstance = true
     }
 
@@ -105,31 +118,65 @@ class JourneyRequest : Fragment(), PermissionsListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        journeyRequestCard = view.findViewById(R.id.journey_confirm_card)
         textOrigin = view.findViewById(R.id.edittext_origin)
         textDestination = view.findViewById(R.id.edittext_destination)
         textArrivalTime = view.findViewById(R.id.textview_time_arrival)
         textPickupTime = view.findViewById(R.id.journey_time_pickup)
+        textPriceEstimate = view.findViewById(R.id.textview_price_estimate)
         buttonRequest = view.findViewById(R.id.button_find_drivers)
         mapView = view.findViewById(R.id.mapView)
         mapView.onCreate(savedInstanceState)
 
+        locationOrigin = null
+        locationDestination = null
+        locationSelection = null
+
+        // hide the journey request card
+        journeyRequestCard.isEnabled = false
+        journeyRequestCard.visibility = View.GONE
+
+        // set the initial target pickup time
+        val targetTime: Calendar = Calendar.getInstance()
+        targetTime.add(Calendar.MINUTE, 5)
+        val targetHour = targetTime.get(HOUR)
+        val targetMinute = targetTime.get(MINUTE)
+        textPickupTime.setText("$targetHour:$targetMinute")
+
         textPickupTime.setOnClickListener {
 
-            val currentTime: Calendar = Calendar.getInstance()
-            val currentHour = currentTime.get(HOUR)
-            val currentMinute = currentTime.get(MINUTE)
+            // whenever the pickup time is edited, default to the default target pickup time first
+            val targetTime: Calendar = Calendar.getInstance()
+            targetTime.add(Calendar.MINUTE, 5)
+            val targetHour = targetTime.get(HOUR)
+            val targetMinute = targetTime.get(MINUTE)
+            textPickupTime.setText("$targetHour:$targetMinute")
 
-            textPickupTime.setText("$currentHour:$currentMinute")
-
+            // get the true target pickup time from a time picker dialog
             val mTimePicker = TimePickerDialog(context, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                 textPickupTime.setText("${hourOfDay}:${minute}")
-            }, currentHour, currentMinute, true)
+            }, targetHour, targetMinute, true)
 
             mTimePicker.setTitle("Select Time")
             mTimePicker.show()
         }
 
+        textOrigin.isEnabled = true
+        textOrigin.isClickable = true
+        textOrigin.setOnClickListener {
+            locationSelection = locationOrigin
+            Toast.makeText(context, "select a pickup location", Toast.LENGTH_LONG).show()
+        }
+
+        textDestination.isEnabled = true
+        textDestination.isClickable = true
+        textDestination.setOnClickListener {
+            locationSelection = locationDestination
+            Toast.makeText(context, "select a drop-off location", Toast.LENGTH_LONG).show()
+        }
+
         buttonRequest.setOnClickListener {
+            // if all fields are ready for a request to be sent, navigate to the next view
             if (isRequestEnabled()) {
                 NavHostFragment.findNavController(this).navigate(R.id.action_home_to_journeyConfirm)
             }
@@ -141,13 +188,12 @@ class JourneyRequest : Fragment(), PermissionsListener {
         }
     }
 
-    override fun onPermissionResult(granted: Boolean) {
-        if (granted)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             enableLocationComponent(mapboxMap.style!!)
-    }
-
-    override fun onExplanationNeeded(permissionsToExplain: MutableList<String>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            moveCameraToCurrentLocation()
+        }
     }
 
     private fun onMapReady() {
@@ -159,6 +205,9 @@ class JourneyRequest : Fragment(), PermissionsListener {
             enableLocationComponent(mapboxMap.style!!)
             moveCameraToCurrentLocation()
 
+            makeOriginCurrentLocation()
+            locationSelection = locationDestination
+
             mapboxMap.addOnMapClickListener { position ->
                 onMapClick(position)
             }
@@ -167,20 +216,36 @@ class JourneyRequest : Fragment(), PermissionsListener {
 
     private fun onMapClick(clickPos: LatLng): Boolean {
 
-        @SuppressLint("MissingPermission")
+        // show the journey request card
+        journeyRequestCard.isEnabled = true
+        journeyRequestCard.visibility = View.VISIBLE
+
+        if (locationOrigin == null)
+                locationOrigin = LatLng(0.0, 0.0)
+
+        if (locationDestination == null)
+            locationDestination = LatLng(0.0, 0.0)
+
+        if (locationSelection == null) {
+            makeOriginCurrentLocation()
+            locationSelection = locationDestination
+        }
+
+        // update the selected position
+        locationSelection!!.longitude = clickPos.longitude
+        locationSelection!!.latitude = clickPos.latitude
+
         val origin: Point = Point.fromLngLat(
-            mapboxMap.locationComponent.lastKnownLocation!!.longitude,
-            mapboxMap.locationComponent.lastKnownLocation!!.latitude
+            locationOrigin!!.longitude,
+            locationOrigin!!.latitude
         )
 
-        val destination = Point.fromLngLat(clickPos.longitude, clickPos.latitude)
+        val destination = Point.fromLngLat(
+            locationDestination!!.longitude,
+            locationDestination!!.latitude
+        )
 
         getRoute(origin, destination)
-//        setGeocodeLocationText(textOrigin, origin)
-//        setGeocodeLocationText(textDestination, destination)
-
-        // enable the request button if it's ok to do so
-        buttonRequest.isEnabled = isRequestEnabled()
 
         d(TAG, "map clicked at coordinates: $clickPos")
         return false
@@ -213,10 +278,30 @@ class JourneyRequest : Fragment(), PermissionsListener {
             val cameraPosition = CameraPosition.Builder()
                 .target(LatLng(lastLocation.latitude, lastLocation.longitude))
                 .zoom(5.0)
-                .tilt(0.0)
+                .tilt(MapboxConstants.MINIMUM_TILT)
                 .build()
 
             mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000)
+        }
+    }
+
+    private fun makeOriginCurrentLocation() {
+        @SuppressLint("MissingPermission")
+        val lastLocation = mapboxMap.locationComponent.lastKnownLocation
+
+        if (lastLocation != null) {
+
+            if (locationOrigin == null)
+                locationOrigin = LatLng(0.0, 0.0)
+
+            locationOrigin!!.longitude = lastLocation.longitude
+            locationOrigin!!.latitude = lastLocation.latitude
+
+            if (locationDestination == null)
+                locationDestination = LatLng(0.0, 0.0)
+
+            // next location selection via map click will set the destination
+            locationSelection = locationDestination
         }
     }
 
@@ -247,25 +332,38 @@ class JourneyRequest : Fragment(), PermissionsListener {
             return
         }
 
-        // set the route on screen
+        // set the route for use on screen
 
         routePickupToDestination = response.body()!!.routes()[0]
 
         val waypoints = response.body()!!.waypoints()!!
+
+        // if there is waypoint data
         if (waypoints.size > 1) {
             val originWaypoint = waypoints[0]!!
             val finalWaypoint = waypoints[waypoints.size - 1]!!
 
-            request.originLong = originWaypoint.location()!!.longitude()
-            request.originLat = originWaypoint.location()!!.latitude()
-            request.destinationLong = finalWaypoint.location()!!.longitude()
-            request.destinationLat = finalWaypoint.location()!!.latitude()
+            // update information for use in the fragment
+            locationOrigin!!.longitude = originWaypoint.location()!!.longitude()
+            locationOrigin!!.latitude = originWaypoint.location()!!.latitude()
+
+            locationDestination!!.longitude = finalWaypoint.location()!!.longitude()
+            locationDestination!!.latitude = finalWaypoint.location()!!.latitude()
 
             textOrigin.text = originWaypoint.name()!!
             textDestination.text = finalWaypoint.name()!!
+
+            // update the unter request model
+            updateRequestModel(locationOrigin!!, locationDestination!!)
+
+            // update the price estimate
+            textPriceEstimate.isEnabled = true
+        } else {
+            textPriceEstimate.isEnabled = false
         }
+
+        // update the most recent route on the screen
         if (navigationMapRoute != null) {
-            // TODO change this deprecated code
             navigationMapRoute!!.updateRouteArrowVisibilityTo(false)
             navigationMapRoute!!.updateRouteVisibilityTo(false)
         } else {
@@ -276,6 +374,19 @@ class JourneyRequest : Fragment(), PermissionsListener {
 
     private fun onRouteFailure(call: Call<DirectionsResponse>, throwable: Throwable) {
         e(TAG, "error: ${throwable.message}")
+    }
+
+    private fun updateRequestModel(origin: LatLng, destination: LatLng) {
+        // update unter unter request model
+        request.originLong = origin.longitude
+        request.originLat = origin.latitude
+        request.destinationLong = destination.longitude
+        request.destinationLat = destination.longitude
+
+        // enable the request button if it's ok to do so
+        val enabled = isRequestEnabled()
+        buttonRequest.isEnabled = enabled
+        textPickupTime.isEnabled = enabled
     }
 
     private fun setGeocodeLocationText(view: TextView, point: Point) {
@@ -329,8 +440,7 @@ class JourneyRequest : Fragment(), PermissionsListener {
             locationComponent.renderMode = RenderMode.COMPASS
 
         } else {
-            permissionsManager = PermissionsManager(this)
-            permissionsManager.requestLocationPermissions(activity)
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PackageManager.PERMISSION_GRANTED)
         }
     }
 
@@ -339,14 +449,6 @@ class JourneyRequest : Fragment(), PermissionsListener {
                 request.originLong != null &&
                 request.destinationLat != null &&
                 request.destinationLong != null
-    }
-
-    private fun clearBackStack() {
-        val manager: FragmentManager = fragmentManager!!
-        if (manager.backStackEntryCount > 0) {
-            val first = manager.getBackStackEntryAt(0)
-            manager.popBackStack(first.id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        }
     }
 
     override fun onStart() {
