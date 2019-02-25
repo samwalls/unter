@@ -2,6 +2,7 @@ package com.unter.model
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModel
+import android.content.SharedPreferences
 import android.util.Log.d
 import com.unter.model.exception.LoginException
 
@@ -23,14 +24,22 @@ class UnterAppModel : ViewModel() {
     var currentUser: UserInfo? = _currentUser
         get() = _currentUser
 
-    fun initStorage(storageDir: String) {
-        app = UnterApp(storageDir)
+    fun initStorage(sharedPreferences: SharedPreferences) {
+        app = UnterApp(sharedPreferences)
         app.init()
     }
 
     override fun onCleared() {
         super.onCleared()
         app.exit()
+    }
+
+    fun save() {
+        app.storage.saveStorage()
+    }
+
+    fun load() {
+        app.storage.loadStorage()
     }
 
     fun login(email: String, password: String): UserInfo {

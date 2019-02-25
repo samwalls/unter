@@ -8,13 +8,10 @@ public abstract class App<T extends AppDataModel> {
 
     public void init() throws Exception {
         onInit();
-        storage.initStorage();
     }
 
     public void exit() throws Exception {
         onExit();
-        storage.saveStorage();
-        storage.closeStorage();
     }
 
     public T data() {

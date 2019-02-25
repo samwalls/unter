@@ -1,14 +1,21 @@
 package com.unter.model;
 
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import com.unter.model.exception.LoginException;
 import com.unter.model.exception.RegisterException;
 
 import java.util.List;
 
+import static android.util.Log.d;
+
+@SuppressLint("LogNotTimber")
 public class UnterApp extends App<SimpleAppData> {
 
-    public UnterApp(String storeUrl) {
-        storage = new FileAppStorageContext<>(storeUrl, new SimpleAppData());
+    private static final String TAG = UnterApp.class.getCanonicalName();
+
+    public UnterApp(SharedPreferences sharedPreferences) {
+        storage = new SharedPreferencesStorageContext(new SimpleAppData(), sharedPreferences);
     }
 
     @Override
@@ -18,6 +25,7 @@ public class UnterApp extends App<SimpleAppData> {
 
     @Override
     public void onExit() throws Exception {
+        storage.saveStorage();
         storage.closeStorage();
     }
 

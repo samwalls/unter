@@ -1,10 +1,16 @@
 package com.unter.model;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 
 import java.io.*;
 
+import static android.util.Log.d;
+
+@SuppressLint("LogNotTimber")
 public class FileAppStorageContext<T extends AppDataModel> extends AppStorageContext<T> {
+
+    private static final String TAG = FileAppStorageContext.class.getCanonicalName();
 
     private static final String fileUrl = "unter_cache";
 
@@ -19,6 +25,7 @@ public class FileAppStorageContext<T extends AppDataModel> extends AppStorageCon
 
     @Override
     public void initStorage() throws IOException, ClassNotFoundException {
+        d(TAG, "loading app storage model from file");
         String name = Uri.parse(fileUrl).getLastPathSegment();
         file = new File(storeDirectory, name);
 
@@ -45,6 +52,7 @@ public class FileAppStorageContext<T extends AppDataModel> extends AppStorageCon
 
     @Override
     public void saveStorage() throws IOException {
+        d(TAG, "saving app storage model to file");
         writeAppModelToFile();
     }
 

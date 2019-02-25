@@ -1,6 +1,7 @@
 package com.unter.activity
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
@@ -16,6 +17,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         model = ViewModelProviders.of(this).get(UnterAppModel::class.java)
-        model.initStorage(filesDir.absolutePath)
+        model.initStorage(getPreferences(Context.MODE_PRIVATE))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        model.save()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        model.save()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        model.save()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        model.load()
     }
 }
