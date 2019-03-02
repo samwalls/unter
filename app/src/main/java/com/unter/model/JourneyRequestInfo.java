@@ -2,6 +2,8 @@ package com.unter.model;
 
 public class JourneyRequestInfo extends Data {
 
+    private Long pickupTime = null;
+
     private Double originLong = null, originLat = null;
     private Double destinationLong = null, destinationLat = null;
 
@@ -13,20 +15,13 @@ public class JourneyRequestInfo extends Data {
         super(id);
     }
 
-    public JourneyRequestInfo(double oLng, double oLat, double dLng, double dLat) {
-        super(null);
-        this.originLong = oLng;
-        this.originLat = oLat;
-        this.destinationLong = dLng;
-        this.destinationLat = dLat;
-    }
-
-    public JourneyRequestInfo(String id, double oLng, double oLat, double dLng, double dLat) {
+    public JourneyRequestInfo(String id, double oLng, double oLat, double dLng, double dLat, long pickupTime) {
         super(id);
         this.originLong = oLng;
         this.originLat = oLat;
         this.destinationLong = dLng;
         this.destinationLat = dLat;
+        this.pickupTime = pickupTime;
     }
 
     public Double getOriginLong() {
@@ -59,5 +54,13 @@ public class JourneyRequestInfo extends Data {
 
     public void setDestinationLat(Double destinationLat) {
         this.destinationLat = destinationLat;
+    }
+
+    public void setPickupTime(Long timestamp) {
+        this.pickupTime = timestamp;
+    }
+
+    public Long getPickupTime() {
+        return this.pickupTime;
     }
 }

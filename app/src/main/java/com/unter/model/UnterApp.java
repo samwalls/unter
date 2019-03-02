@@ -2,6 +2,7 @@ package com.unter.model;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import com.unter.model.exception.JourneyConfirmationException;
 import com.unter.model.exception.LoginException;
 import com.unter.model.exception.RegisterException;
 
@@ -31,12 +32,18 @@ public class UnterApp extends App<SimpleAppData> {
 
     @Override
     public String login(String email, String password) throws LoginException {
+        storage.data.setLoggedInUser(null);
         List<String> ids = storage.data.getUserIds();
 
         for (String id : ids) {
             UserInfo user = storage.data.getUser(id);
-            if (user.email.equals(email))
-                storage.data.setLoggedInUser(user);
+            if (user.email.equals(email)) {
+                // TODO: work based on encrypted or salt/hashed password
+                if (user.password.equals(password))
+                    storage.data.setLoggedInUser(user);
+                else
+                    throw new LoginException("incorrect password");
+            }
         }
 
         if (!isLoggedIn()) {
@@ -48,17 +55,23 @@ public class UnterApp extends App<SimpleAppData> {
         return storage.data.getLoggedInUser();
     }
 
-    @Override
     public boolean isLoggedIn() {
         return storage.data.getLoggedInUser() != null;
     }
 
     public void register(String email, String password) throws RegisterException {
+
+        if (email == null || email.isEmpty())
+            throw new RegisterException("email cannot be empty");
+
+        if (password == null || password.isEmpty())
+            throw new RegisterException("password cannot be empty");
+
         // first check existing users
         List<String> ids = storage.data.getUserIds();
         for (String id : ids) {
             UserInfo user = storage.data.getUser(id);
-            if (user != null) {
+            if (user != null && user.email.equals(email)) {
                 onRegisterFailure();
                 throw new RegisterException("user with email \'" + email + "\' is already registered");
             }
@@ -66,21 +79,33 @@ public class UnterApp extends App<SimpleAppData> {
 
         // add a new user
         // TODO: sequential IDs is bad, implement something proper
-        // TODO: do something with the password
+        // TODO: encrypt/hash the password
         String nextId = Integer.toString(ids.size());
-        storage.data.addUser(new UserInfo(nextId, email));
+        storage.data.addUser(new UserInfo(nextId, email, password));
 
         onRegisterSuccess();
     }
 
-    @Override
-    public UserInfo getUser(String userId) {
-        return storage.data.getUser(userId);
+    public String addJourneyRequest(JourneyRequestInfo request) {
+        request.id = Integer.toString(storage.data.getJourneyRequestIds().size());
+        storage.data.addJourneyRequest(request);
+        return request.id;
     }
 
-    @Override
-    public DriverInfo requestDriver(JourneyRequestInfo request) {
-        // TODO
-        return null;
+    public JourneyInfo confirmJourney(UserInfo user, JourneyRequestInfo request, DriverInfo driver) throws JourneyConfirmationException {
+
+        if (user.getJourneyId() != null)
+            throw new JourneyConfirmationException("cannot make a new journey when the user is already in one");
+
+        // get a driver
+        String nextId = Integer.toString(storage.data.getJourneyIds().size());
+        JourneyInfo journey = new JourneyInfo(nextId, user, request, driver);
+        // commit a new journey object to the storage context
+        storage.data.addJourney(journey);
+
+        // set the user's current journey
+        user.setJourneyId(journey.id);
+
+        return journey;
     }
 }

@@ -7,6 +7,7 @@
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
             android:allowBackup="true"
@@ -14,7 +15,8 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:vmSafeMode="true">
 
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_api_key"/>
 
@@ -30,6 +32,19 @@
         </activity>
 
         <activity
+                android:name=".activity.JourneyInfoActivity"
+                android:label="Unter"
+                android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Allows the activity to pick up on "unter" URIs -->
+                <data android:scheme="unter" android:host="ride" android:pathPattern="/info.*" android:path="/info"/>
+            </intent-filter>
+        </activity>
+
+        <activity
                 android:name=".activity.JourneyConfirmActivity"
                 android:label="Unter"
                 android:theme="@style/AppTheme.NoActionBar">
@@ -38,12 +53,28 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Allows the activity to pick up on "unter" URIs -->
-                <data android:scheme="unter"/>
+                <data android:scheme="unter" android:host="ride" android:pathPattern="/request.*"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Allows the activity to pick up on "unter" URIs -->
+                <data android:scheme="unter" android:host="ride" android:pathPattern="/confirm.*"/>
             </intent-filter>
         </activity>
+
         <service
                 android:name=".service.RideNotificationService"
-                android:label="Unter Ride Notification Service"/>
+                android:label="Unter Ride Notification Service">
+            <intent-filter>
+                <action android:name="android.intent.action.RUN"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- pick up unter URIs -->
+                <data android:scheme="unter" android:host="ride" android:path="/notify" android:pathPattern="/notify*"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -59,6 +59,7 @@ class Login : Fragment() {
             try {
                 // attempt to login
                 model.login(textEmail.text.toString(), textPassword.text.toString())
+                model.save()
                 NavHostFragment.findNavController(this).navigate(R.id.action_login_to_home)
             } catch (e: LoginException) {
                 // display error if unsuccessful

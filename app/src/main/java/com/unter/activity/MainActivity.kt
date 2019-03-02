@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
 
 import com.unter.*
 import com.unter.model.UnterAppModel
@@ -17,7 +18,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         model = ViewModelProviders.of(this).get(UnterAppModel::class.java)
-        model.initStorage(getPreferences(Context.MODE_PRIVATE))
+        if (!model.isInitialised())
+            model.initStorage(applicationContext)
+        model.load()
+
+        if (model.lastUserLogin != null) {
+            val fragment = supportFragmentManager.findFragmentById(R.id.splash) as Splash
+            NavHostFragment.findNavController(fragment).navigate(R.id.action_splash_to_home)
+        }
     }
 
     override fun onDestroy() {

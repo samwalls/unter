@@ -8,7 +8,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.CardView
@@ -51,9 +53,10 @@ import com.unter.model.UnterAppModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.util.*
-import java.util.Calendar.HOUR
-import java.util.Calendar.MINUTE
+import java.util.Calendar.*
+import kotlin.math.roundToInt
 
 
 /**
@@ -78,10 +81,7 @@ class JourneyRequest : Fragment() {
 
     private lateinit var textOrigin: TextView
     private lateinit var textDestination: TextView
-    private lateinit var textArrivalTime: TextView
     private lateinit var textPickupTime: EditText
-
-    private lateinit var textPriceEstimate: TextView
 
     private lateinit var buttonRequest: Button
 
@@ -123,9 +123,7 @@ class JourneyRequest : Fragment() {
         journeyRequestCard = view.findViewById(R.id.journey_confirm_card)
         textOrigin = view.findViewById(R.id.edittext_origin)
         textDestination = view.findViewById(R.id.edittext_destination)
-        textArrivalTime = view.findViewById(R.id.textview_time_arrival)
         textPickupTime = view.findViewById(R.id.journey_time_pickup)
-        textPriceEstimate = view.findViewById(R.id.textview_price_estimate)
         buttonRequest = view.findViewById(R.id.button_find_drivers)
         mapView = view.findViewById(R.id.mapView)
         mapView.onCreate(savedInstanceState)
@@ -141,22 +139,24 @@ class JourneyRequest : Fragment() {
         // set the initial target pickup time
         val targetTime: Calendar = Calendar.getInstance()
         targetTime.add(Calendar.MINUTE, 5)
-        val targetHour = targetTime.get(HOUR)
+        val targetHour = targetTime.get(HOUR_OF_DAY)
         val targetMinute = targetTime.get(MINUTE)
         textPickupTime.setText("$targetHour:$targetMinute")
+        setRequestPickupTime(targetHour, targetMinute)
 
         textPickupTime.setOnClickListener {
 
             // whenever the pickup time is edited, default to the default target pickup time first
             val targetTime: Calendar = Calendar.getInstance()
             targetTime.add(Calendar.MINUTE, 5)
-            val targetHour = targetTime.get(HOUR)
+            val targetHour = targetTime.get(HOUR_OF_DAY)
             val targetMinute = targetTime.get(MINUTE)
             textPickupTime.setText("$targetHour:$targetMinute")
 
             // get the true target pickup time from a time picker dialog
             val mTimePicker = TimePickerDialog(context, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                 textPickupTime.setText("${hourOfDay}:${minute}")
+                setRequestPickupTime(hourOfDay, minute)
             }, targetHour, targetMinute, true)
 
             mTimePicker.setTitle("Select Time")
@@ -180,16 +180,18 @@ class JourneyRequest : Fragment() {
         buttonRequest.setOnClickListener {
             // if all fields are ready for a request to be sent, navigate to the next view
             if (isRequestEnabled()) {
-                model.currentRequest = request
 
                 val requestUri: Uri = Uri.parse("unter://ride/request" +
-                        "?userId=${model.currentUser!!.id}" +
-                        "&originLong=${model.currentRequest!!.originLong}" +
-                        "&originLat=${model.currentRequest!!.originLat}" +
-                        "&destinationLong=${model.currentRequest!!.destinationLong}" +
-                        "&destinationLat=${model.currentRequest!!.destinationLat}")
+                        "?userId=${model.lastUserLogin}" +
+                        "&originLong=${request.originLong}" +
+                        "&originLat=${request.originLat}" +
+                        "&destinationLong=${request.destinationLong}" +
+                        "&destinationLat=${request.destinationLat}" +
+                        "&pickup=${request.pickupTime}")
 
-                d(TAG, "emitting journey confirm intent with URI: '$requestUri'")
+                model.save()
+
+                d(TAG, "emitting journey request intent with URI: '$requestUri'")
                 startActivity(Intent(Intent.ACTION_VIEW, requestUri))
             }
         }
@@ -198,6 +200,14 @@ class JourneyRequest : Fragment() {
             this.mapboxMap = map
             onMapReady()
         }
+    }
+
+    private fun setRequestPickupTime(hour: Int, minute: Int) {
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        // set the timestamp in the request (seconds since epoch)
+        request.pickupTime = calendar.time.time / 1000
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -335,7 +345,7 @@ class JourneyRequest : Fragment() {
     }
 
     private fun onRouteResponse(call: Call<DirectionsResponse>, response: Response<DirectionsResponse>) {
-        d(TAG, "response code: ${response.code()}")
+        d(TAG, "mapbox route request response code: ${response.code()}")
         if (response.body() == null) {
             e(TAG, "route request response body is null")
             return
@@ -367,11 +377,6 @@ class JourneyRequest : Fragment() {
 
             // update the unter request model
             updateRequestModel(locationOrigin!!, locationDestination!!)
-
-            // update the price estimate
-            textPriceEstimate.isEnabled = true
-        } else {
-            textPriceEstimate.isEnabled = false
         }
 
         // update the most recent route on the screen
@@ -463,11 +468,6 @@ class JourneyRequest : Fragment() {
                 request.destinationLong != null
     }
 
-    override fun onStart() {
-        super.onStart()
-        mapView.onStart()
-    }
-
     override fun onResume() {
         super.onResume()
         mapView.onResume()
@@ -476,12 +476,31 @@ class JourneyRequest : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         // there seems to be a bug with the following line: https://github.com/mapbox/mapbox-gl-native/issues/10030
-        //mapView.onDestroy()
+        mapView.onDestroy()
+        locationComponent.onDestroy()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mapView.onDestroy()
+        locationComponent.onDestroy()
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
         mapView.onLowMemory()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        model.load()
+        mapView.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        model.save()
+        mapView.onStop()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -15,19 +15,24 @@ public class SharedPreferencesStorageContext extends AppStorageContext<SimpleApp
     }
 
     @Override
-    public void initStorage() throws Exception {
-
+    public void initStorage() {
+        SimpleAppData d = data;
+        loadStorage();
+        if (data == null && d != null) {
+            data = d;
+            saveStorage();
+        }
     }
 
     @Override
-    public void loadStorage() throws Exception {
+    public void loadStorage() {
         Gson gson = new Gson();
         String json = sharedPreferences.getString(SHARED_PREF_KEY, "");
         data = gson.fromJson(json, SimpleAppData.class);
     }
 
     @Override
-    public void saveStorage() throws Exception {
+    public void saveStorage() {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(data);
@@ -37,7 +42,7 @@ public class SharedPreferencesStorageContext extends AppStorageContext<SimpleApp
     }
 
     @Override
-    public void deleteStorage() throws Exception {
+    public void deleteStorage() {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         prefsEditor.putString(SHARED_PREF_KEY, "");
         // TODO: consider apply() vs commit()
@@ -45,5 +50,5 @@ public class SharedPreferencesStorageContext extends AppStorageContext<SimpleApp
     }
 
     @Override
-    public void closeStorage() throws Exception { }
+    public void closeStorage() { }
 }

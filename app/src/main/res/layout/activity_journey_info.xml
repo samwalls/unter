@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            mapbox:layout_constraintEnd_toEndOf="@+id/info_mapView" android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp" mapbox:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="8dp" android:layout_marginStart="8dp" android:layout_marginTop="8dp"
+            mapbox:layout_constraintTop_toTopOf="@+id/info_mapView" android:layout_marginBottom="8dp"
+            mapbox:layout_constraintBottom_toTopOf="@+id/button_debug_journey_finish"
+            android:id="@+id/card_assessment_view">
+        <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:text="Bob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/driver_name" mapbox:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
+                    mapbox:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp" android:layout_marginTop="64dp"
+                    mapbox:layout_constraintTop_toBottomOf="@+id/driver_image" android:textSize="24sp"/>
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" tools:srcCompat="@tools:sample/avatars"
+                    android:id="@+id/driver_image" android:layout_marginTop="32dp"
+                    mapbox:layout_constraintTop_toTopOf="parent" mapbox:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginLeft="8dp" android:layout_marginStart="8dp"
+                    mapbox:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"/>
+            <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ratingbar_driver_rating" mapbox:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginLeft="8dp" android:layout_marginStart="8dp"
+                    mapbox:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp" android:layout_marginTop="32dp"
+                    mapbox:layout_constraintTop_toBottomOf="@+id/textView2"/>
+            <TextView
+                    android:text="rate your journey with Bob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView2" android:layout_marginTop="32dp"
+                    mapbox:layout_constraintTop_toBottomOf="@+id/driver_name" android:layout_marginStart="8dp"
+                    mapbox:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
+                    mapbox:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"/>
+            <Button
+                    android:text="Pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_driver_pay"
+                    mapbox:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp" mapbox:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
+                    mapbox:layout_constraintHorizontal_bias="0.498" android:layout_marginTop="32dp"
+                    mapbox:layout_constraintTop_toBottomOf="@+id/text_driver_fee"/>
+            <TextView
+                    android:text="£9000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/text_driver_fee"
+                    mapbox:layout_constraintTop_toBottomOf="@+id/ratingbar_driver_rating"
+                    mapbox:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
+                    mapbox:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp" android:textSize="24sp" android:layout_marginTop="90dp"/>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+    <Button
+            android:text="Driver Arrive (debug)"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" android:id="@+id/button_debug_driver_arrive"
+            android:layout_marginBottom="8dp"
+            mapbox:layout_constraintBottom_toTopOf="@+id/info_card_tooltip"
+            mapbox:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="8dp" android:layout_marginStart="8dp"
+            mapbox:layout_constraintEnd_toStartOf="@+id/guideline2" android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp" android:textSize="12sp"/>
+    <Button
+            android:text="Journey Finish (debug)"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" android:id="@+id/button_debug_journey_finish"
+            android:layout_marginBottom="8dp"
+            mapbox:layout_constraintBottom_toTopOf="@+id/info_card_tooltip" mapbox:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
+            mapbox:layout_constraintStart_toStartOf="@+id/guideline2" android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp" android:textSize="12sp"/>
+    <android.support.v7.widget.CardView
+            android:layout_height="64dp"
+            android:layout_width="0dp" mapbox:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="8dp" android:layout_marginStart="8dp"
+            mapbox:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp" mapbox:layout_constraintHorizontal_bias="0.498"
+            android:visibility="gone" android:layout_marginBottom="8dp"
+            mapbox:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/info_card_tooltip">
+        <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:text="Tooltip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/info_textview_tooltip"
+                    android:layout_marginTop="8dp"
+                    mapbox:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+                    mapbox:layout_constraintBottom_toBottomOf="parent"
+                    mapbox:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginLeft="8dp" android:layout_marginStart="8dp"
+                    mapbox:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp" tools:text="Tooltip"/>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.constraint.Guideline
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" mapbox:layout_constraintGuide_begin="205dp"
+            android:id="@+id/guideline2"/>
+    <com.mapbox.mapboxsdk.maps.MapView
+            android:id="@+id/info_mapView"
+            mapbox:layout_constraintBottom_toBottomOf="parent"
+            mapbox:layout_constraintEnd_toEndOf="parent"
+            mapbox:layout_constraintStart_toStartOf="parent"
+            mapbox:layout_constraintTop_toTopOf="parent"
+            mapbox:mapbox_cameraTargetLat="55.378"
+            mapbox:mapbox_cameraTargetLng="3.436"
+            mapbox:mapbox_cameraTilt="0"
+            mapbox:mapbox_cameraZoom="12"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" mapbox:layout_constraintHorizontal_bias="1.0"
+            mapbox:layout_constraintVertical_bias="1.0">
+    </com.mapbox.mapboxsdk.maps.MapView>
+</android.support.constraint.ConstraintLayout>

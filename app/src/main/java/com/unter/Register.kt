@@ -60,6 +60,7 @@ class Register : Fragment() {
             try {
                 // request the controller to register a user
                 model.register(textEmail.text.toString(), textPassword.text.toString())
+                model.save()
                 // change the view if successful
                 NavHostFragment.findNavController(this).navigate(R.id.action_register_to_login)
             } catch (e: RegisterException) {

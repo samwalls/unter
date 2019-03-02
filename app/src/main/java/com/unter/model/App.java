@@ -32,15 +32,9 @@ public abstract class App<T extends AppDataModel> {
 
     public void onLoginFailure() {}
 
-    public abstract boolean isLoggedIn();
-
     public abstract void register(String username, String password) throws RegisterException;
 
     public void onRegisterSuccess() {}
 
     public void onRegisterFailure() {}
-
-    public abstract UserInfo getUser(String userId);
-
-    public abstract DriverInfo requestDriver(JourneyRequestInfo request);
 }
